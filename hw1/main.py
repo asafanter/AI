@@ -169,9 +169,22 @@ def relaxed_deliveries_problem():
     #    (x-axis). Of course that the costs of A*, and deterministic
     #    greedy are not dependent with the iteration number, so
     #    these two should be represented by horizontal lines.
+    results = np.array([np.inf]*100)
+    for i in range(100):
+        greedy_stochastic = GreedyStochastic(MSTAirDistHeuristic)
+        result = greedy_stochastic.solve_problem(big_deliveries_prob)
+        results[i] = result.final_search_node.cost
+        plt.plot(i, min(results), label="AGSA")
+    
+    plt.xlabel("Iterations of Anytime Greedy Stochastic Algorithm")
+    plt.ylabel("Cost of Solution")
+    plt.title("Cost of solution as function of iterations")
+    plt.legend()
+    plt.grid()
+    plt.show()
 
-    greedy_stochastic = GreedyStochastic(MSTAirDistHeuristic)
-    greedy_stochastic.solve_problem(big_deliveries_prob)
+
+
 
 
 def strict_deliveries_problem():
@@ -204,7 +217,7 @@ class Person:
 def main():
     # map_problem()
     relaxed_deliveries_problem()
-    strict_deliveries_problem()
+    # strict_deliveries_problem()
 
 
 if __name__ == '__main__':
