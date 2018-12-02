@@ -74,8 +74,8 @@ class GreedyStochastic(BestFirstSearch):
         # Calculate the probability of using each item
         priorities = np.array([node.expanding_priority for node in best_nodes])
         alpha = min(priorities)
-        if alpha is 0:
-            probabilities = (priorities / min(priorities)) ** (-1.0/self.T)
+        if alpha != 0.0:
+            probabilities = (priorities / alpha) ** (-1.0/self.T)
             probabilities = probabilities / sum(probabilities)
 
             # Select random node
@@ -86,7 +86,7 @@ class GreedyStochastic(BestFirstSearch):
 
         # Clean up function
         for node in best_nodes:
-            if node is not node_to_expand:
+            if node != node_to_expand:
                 self.open.push_node(node)
         
         self.close.add_node(node_to_expand)
