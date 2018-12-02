@@ -79,10 +79,10 @@ class StrictDeliveriesProblem(RelaxedDeliveriesProblem):
                 continue
 
             if junction in self.gas_stations:
-                successor = RelaxedDeliveriesState(junction, state_to_expand.dropped_so_far, self.gas_tank_capacity)
+                successor = StrictDeliveriesState(junction, state_to_expand.dropped_so_far, self.gas_tank_capacity)
 
             else:
-                successor = RelaxedDeliveriesState(junction, state_to_expand.dropped_so_far | frozenset([junction]),
+                successor = StrictDeliveriesState(junction, state_to_expand.dropped_so_far | frozenset([junction]),
                                                    state_to_expand.fuel - dist)
 
             yield successor, dist
@@ -102,11 +102,11 @@ class StrictDeliveriesProblem(RelaxedDeliveriesProblem):
             # use inner_roads to avoid going through additional stop points on the way
             inner_roads = dict()
             blacklist = self.drop_points - allowed - frozenset([end]) # Not allowed to visit gas stations or unvisited delivery points
-            for j in self.roads:
+            for j in self.roads.junctions():
                 links = [l for l in j.links if self.roads[l.target] not in blacklist]
                 inner_roads[j.index] = Junction(j.index, j.lat, j.lon, links)
 
-            path = self.inner_problem_solver(MapProblem(Roads(inner_roads), start.index, end.index))
+            path = self.inner_problem_solver.solve_problem(MapProblem(Roads(inner_roads), start.index, end.index))
             dist = path.final_search_node.cost
             self._insert_to_cache((start.index, end.index), dist)
         return dist
