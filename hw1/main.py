@@ -169,13 +169,27 @@ def relaxed_deliveries_problem():
     #    (x-axis). Of course that the costs of A*, and deterministic
     #    greedy are not dependent with the iteration number, so
     #    these two should be represented by horizontal lines.
+    # GSA
     results = np.array([np.inf]*100)
+    best = np.inf
     for i in range(100):
         greedy_stochastic = GreedyStochastic(MSTAirDistHeuristic)
         result = greedy_stochastic.solve_problem(big_deliveries_prob)
-        results[i] = result.final_search_node.cost
-        plt.plot(i, min(results), label="AGSA")
-    
+        cost = result.final_search_node.cost
+        results[i] = best = min(best, cost)
+    plt.plot(range(1,101), results, label="Greedy-Stochastic")
+
+    # A* w=.5
+    a_star = AStar(MSTAirDistHeuristic, 0.5)
+    res = a_star.solve_problem(big_deliveries_prob)
+    plt.axhline(res.final_search_node.cost, label="A* w=.5")
+
+    # A* w=1
+    a_star = AStar(MSTAirDistHeuristic, 1)
+    res = a_star.solve_problem(big_deliveries_prob)
+    plt.axhline(res.final_search_node.cost, label="Greedy")
+
+    plt.ylim(top = plt.ylim()[1] * 1.03)
     plt.xlabel("Iterations of Anytime Greedy Stochastic Algorithm")
     plt.ylabel("Cost of Solution")
     plt.title("Cost of solution as function of iterations")
