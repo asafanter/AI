@@ -68,7 +68,24 @@ class StrictDeliveriesProblem(RelaxedDeliveriesProblem):
         """
         assert isinstance(state_to_expand, StrictDeliveriesState)
 
-        raise NotImplemented()  # TODO: remove!
+        for junction in self.possible_stop_points - state_to_expand.dropped_so_far:
+            if junction == state_to_expand.current_location:
+                continue
+
+            # Gets shortest path from here to there without going through any additional gas stations or unvisited delivery points
+            dist = self.get_distance(state_to_expand.current_location, junction, state_to_expand.dropped_so_far)
+
+            if dist > state_to_expand.fuel:
+                continue
+
+            if junction in self.gas_stations:
+                successor = RelaxedDeliveriesState(junction, state_to_expand.dropped_so_far, self.gas_tank_capacity)
+
+            else:
+                successor = RelaxedDeliveriesState(junction, state_to_expand.dropped_so_far | frozenset([junction]),
+                                                   state_to_expand.fuel - dist)
+
+            yield successor, dist
 
     def is_goal(self, state: GraphProblemState) -> bool:
         """
@@ -77,4 +94,20 @@ class StrictDeliveriesProblem(RelaxedDeliveriesProblem):
         """
         assert isinstance(state, StrictDeliveriesState)
 
-        raise NotImplemented()  # TODO: remove!
+        return state.dropped_so_far == self.drop_points and state.fuel >= 0
+    
+    def get_distance(self, start: Junction, end: Junction, allowed: FrozenSet[Junction]) -> float:
+        dist = self._get_from_cache((start.index, end.index))
+        if dist is None:
+            # use inner_roads to avoid going through additional stop points on the way
+            inner_roads = dict()
+            blacklist = self.drop_points - allowed - frozenset([end]) # Not allowed to visit gas stations or unvisited delivery points
+            for j in self.roads:
+                links = [l for l in j.links if self.roads[l.target] not in blacklist]
+                inner_roads[j.index] = Junction(j.index, j.lat, j.lon, links)
+
+            path = self.inner_problem_solver(MapProblem(Roads(inner_roads), start.index, end.index))
+            dist = path.final_search_node.cost
+            self._insert_to_cache((start.index, end.index), dist)
+        return dist
+
