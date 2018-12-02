@@ -116,7 +116,7 @@ class RelaxedDeliveriesProblem(GraphProblem):
         """
         assert isinstance(state, RelaxedDeliveriesState)
 
-        return state.dropped_so_far == self.drop_points and state.fuel > 0
+        return state.dropped_so_far == self.drop_points and state.fuel >= 0
 
     def solution_additional_str(self, result: 'SearchResult') -> str:
         """This method is used to enhance the printing method of a found solution."""
