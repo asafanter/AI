@@ -212,7 +212,7 @@ def strict_deliveries_problem():
     # Ex.26
     # TODO: Call here the function `run_astar_for_weights_in_range()`
     #       with `MSTAirDistHeuristic` and `big_deliveries_prob`.
-    exit()  # TODO: remove!
+    run_astar_for_weights_in_range(MSTAirDistHeuristic, small_deliveries_strict_problem)
 
     # Ex.28
     # TODO: create an instance of `AStar` with the `RelaxedDeliveriesHeuristic`,
@@ -230,8 +230,8 @@ class Person:
 
 def main():
     # map_problem()
-    relaxed_deliveries_problem()
-    # strict_deliveries_problem()
+    # relaxed_deliveries_problem()
+    strict_deliveries_problem()
 
 
 if __name__ == '__main__':
