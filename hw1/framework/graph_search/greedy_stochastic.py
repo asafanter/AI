@@ -53,7 +53,7 @@ class GreedyStochastic(BestFirstSearch):
         Extracts the next node to expand from the open queue,
          using the stochastic method to choose out of the N
          best items from open.
-        TODO: implement this method!
+        TODO: implement this method! - done
         Use `np.random.choice(...)` whenever you need to randomly choose
          an item from an array of items given a probabilities array `p`.
         You can read the documentation of `np.random.choice(...)` and
@@ -64,25 +64,26 @@ class GreedyStochastic(BestFirstSearch):
                 pushed again into that queue.
         """
 
-        best_nodes = self.__getBestNodes()
+        if self.open.is_empty():
+            return None
 
-        best_N_priorities = [node.expanding_priority for node in best_nodes]
+        # Get set of items we will randomly choose between
+        n_items = min(len(self.open), self.N)
+        best_nodes = [self.open.pop_next_node() for _ in range(n_items)]
 
-        X = np.array(best_N_priorities)
-        asaf = np.argmin(X)
+        # Calculate the probability of using each item
+        priorities = np.array([node.expanding_priority for node in best_nodes])
+        probabilities = (priorities / min(priorities)) ** (-1.0/self.T)
+        probabilities = probabilities / sum(probabilities)
 
-        T = 1
-        alpha = min(X-100)
+        # Select random node
+        node_to_expand = np.random.choice(best_nodes, p=probabilities)
 
-        s = sum([(xi / alpha) ** - (1 / T) for xi in X])
-
-        P = 4
-
-    def __getBestNodes(self):
-
-        length = self.open.__len__() if self.open.__len__() < self.N else self.N
-        best_nodes = []
-        for _ in range(length):
-            best_nodes.append(self.open.pop_next_node())
-
-        return best_nodes
+        # Clean up function
+        for node in best_nodes:
+            if node is not node_to_expand:
+                self.open.push_node(node)
+        
+        self.close.add_node(node_to_expand)
+        self.T *= self.T_scale_factor
+        return node_to_expand
