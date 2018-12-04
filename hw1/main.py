@@ -77,8 +77,10 @@ def run_astar_for_weights_in_range(heuristic_type: HeuristicFunctionType, proble
         res = a_star.solve_problem(problem)
         distances.append(res.final_search_node.cost)
         num_expanded.append(res.nr_expanded_states)
+        print(res)
 
     plot_distance_and_expanded_wrt_weight_figure(weights, distances, num_expanded)
+    return (weights, distances, num_expanded)
 
 
 
@@ -171,13 +173,16 @@ def relaxed_deliveries_problem():
     #    these two should be represented by horizontal lines.
     # GSA
     results = np.array([np.inf]*100)
+    all_results = np.zeros(100)
     best = np.inf
     for i in range(100):
         greedy_stochastic = GreedyStochastic(MSTAirDistHeuristic)
         result = greedy_stochastic.solve_problem(big_deliveries_prob)
         cost = result.final_search_node.cost
+        all_results[i] = cost
         results[i] = best = min(best, cost)
-    plt.plot(range(1,101), results, label="Greedy-Stochastic")
+    plt.plot(range(1,101), results, label="Anytime Greedy-Stochastic")
+    plt.plot(range(1,101), all_results, label="Single Iteration G-S")
 
     # A* w=.5
     a_star = AStar(MSTAirDistHeuristic, 0.5)
@@ -212,12 +217,16 @@ def strict_deliveries_problem():
     # Ex.26
     # TODO: Call here the function `run_astar_for_weights_in_range()`
     #       with `MSTAirDistHeuristic` and `big_deliveries_prob`.
-    run_astar_for_weights_in_range(MSTAirDistHeuristic, small_deliveries_strict_problem)
-
+    out = run_astar_for_weights_in_range(MSTAirDistHeuristic, small_deliveries_strict_problem)
+    print(out)
     # Ex.28
     # TODO: create an instance of `AStar` with the `RelaxedDeliveriesHeuristic`,
     #       solve the `small_deliveries_strict_problem` with it and print the results (as before).
-    exit()  # TODO: remove!
+    solver = AStar(RelaxedDeliveriesHeuristic)
+    solution = solver.solve_problem(small_deliveries_strict_problem)
+    distance = solution.final_search_node.cost
+    n_states = solution.nr_expanded_states
+    print(solution)
 
 class Person:
 

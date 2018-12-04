@@ -71,6 +71,7 @@ class MSTAirDistHeuristic(HeuristicFunction):
 
 class RelaxedDeliveriesHeuristic(HeuristicFunction):
     heuristic_name = 'RelaxedProb'
+    solver = AStar(MSTAirDistHeuristic)
 
     def estimate(self, state: GraphProblemState) -> float:
         """
@@ -82,5 +83,15 @@ class RelaxedDeliveriesHeuristic(HeuristicFunction):
         assert isinstance(self.problem, StrictDeliveriesProblem)
         assert isinstance(state, StrictDeliveriesState)
 
-        raise NotImplemented()  # TODO: remove!
+        prob_input = DeliveriesProblemInput("RelaxedProbHeuristic", state.current_location,
+                                            self.problem.drop_points - state.dropped_so_far,
+                                            self.problem.gas_stations, self.problem.gas_tank_capacity,
+                                            state.fuel)
+
+        problem = RelaxedDeliveriesProblem(prob_input)
+        solution = self.solver.solve_problem(problem)
+        if solution is None or solution.final_search_node is None:
+            return np.inf
+        else:
+            return solution.final_search_node.cost
 

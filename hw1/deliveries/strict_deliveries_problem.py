@@ -97,17 +97,17 @@ class StrictDeliveriesProblem(RelaxedDeliveriesProblem):
         return state.dropped_so_far == self.drop_points and state.fuel >= 0
     
     def get_distance(self, start: Junction, end: Junction, allowed: FrozenSet[Junction]) -> float:
-        dist = self._get_from_cache((start.index, end.index))
+        blacklist = self.drop_points - allowed - frozenset([end]) # Not allowed to visit gas stations or unvisited delivery points
+        
+        dist = self._get_from_cache((start.index, end.index, blacklist))
         if dist is None:
             # use inner_roads to avoid going through additional stop points on the way
             inner_roads = dict()
-            blacklist = self.drop_points - allowed - frozenset([end]) # Not allowed to visit gas stations or unvisited delivery points
             for j in self.roads.junctions():
                 links = [l for l in j.links if self.roads[l.target] not in blacklist]
                 inner_roads[j.index] = Junction(j.index, j.lat, j.lon, links)
-
             path = self.inner_problem_solver.solve_problem(MapProblem(Roads(inner_roads), start.index, end.index))
             dist = path.final_search_node.cost
-            self._insert_to_cache((start.index, end.index), dist)
+            self._insert_to_cache((start.index, end.index, blacklist), dist)
         return dist
 
