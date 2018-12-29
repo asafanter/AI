@@ -158,43 +158,41 @@ class MinimaxAgent(MultiAgentSearchAgent):
         The depth to which search should continue
 
     """
-    legalMoves = gameState.getLegalActions()
-    children = [gameState.generateSuccessor(self.index, action) for action in legalMoves]
+    legal_moves = gameState.getLegalActions()
+    children = [gameState.generateSuccessor(self.index, action) for action in legal_moves]
 
-    scores = [self.miniMax(self, child) for child in children]
-    bestScore = max(scores)
-    bestIndices = [index for index in range(len(scores)) if scores[index] == bestScore]
-    chosenIndex = random.choice(bestIndices) # Pick randomly among the best
+    scores = [self.miniMax(self.index, child, self.depth) for child in children]
+    best_score = max(scores)
+    best_indices = [index for index in range(len(scores)) if scores[index] == best_score]
+    chosen_index = random.choice(best_indices) # Pick randomly among the best
+
+    return legal_moves[chosen_index]
 
 
-    return legalMoves[chosenIndex]
-
-
-  def miniMax(self, agent, state, depth):
+  def miniMax(self, agent_id, state, depth):
 
     if state.isWin() or depth == 0:
         return betterEvaluationFunction(state)
 
-    agent_id = agent.index
-    legalMoves = state.getLegalActions()
-    #children = [state.generateSuccessor(agent_id, action) for action in legalMoves]
+    legal_moves = state.getLegalActions(agent_id)
+    children = [state.generateSuccessor(agent_id, move) for move in legal_moves]
 
     if agent_id == 0:
         curr_max = -numpy.inf
 
-    for child in children:
+        for child in children:
 
-        v = self.miniMax(agent, child, depth - 1)
-        curr_max = max(v, curr_max)
-        return curr_max
+            value = self.miniMax((agent_id + 1) % state.getNumAgents(), child, depth - 1)
+            curr_max = max(value, curr_max)
+            return curr_max
 
     else:
         curr_min = numpy.inf
 
-    for child in children:
-        v = self.miniMax(agent, child, depth)
-        curr_min = max(v, curr_min)
-        return curr_min
+        for child in children:
+            value = self.miniMax((agent_id + 1) % state.getNumAgents(), child, depth)
+            curr_min = min(value, curr_min)
+            return curr_min
 
 ######################################################################################
 # d: implementing alpha-beta
