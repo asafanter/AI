@@ -80,7 +80,6 @@ def run_astar_for_weights_in_range(heuristic_type: HeuristicFunctionType, proble
         print(res)
 
     plot_distance_and_expanded_wrt_weight_figure(weights, distances, num_expanded)
-    return (weights, distances, num_expanded)
 
 
 
@@ -137,19 +136,19 @@ def relaxed_deliveries_problem():
     # Ex.16
     # TODO: create an instance of `AStar` with the `MaxAirDistHeuristic`, - done
     #       solve the `big_deliveries_prob` with it and print the results (as before).
-    # a_star_max_air = AStar(MaxAirDistHeuristic)
-    # print(a_star_max_air.solve_problem(big_deliveries_prob))
+    a_star_max_air = AStar(MaxAirDistHeuristic)
+    print(a_star_max_air.solve_problem(big_deliveries_prob))
 
     # Ex.17
     # TODO: create an instance of `AStar` with the `MSTAirDistHeuristic`, - done
     #       solve the `big_deliveries_prob` with it and print the results (as before).
-    # a_star_masta = AStar(MSTAirDistHeuristic)
-    # print(a_star_masta.solve_problem(big_deliveries_prob))
+    a_star_masta = AStar(MSTAirDistHeuristic)
+    print(a_star_masta.solve_problem(big_deliveries_prob))
 
     # Ex.18
     # TODO: Call here the function `run_astar_for_weights_in_range()`
     #       with `MSTAirDistHeuristic` and `big_deliveries_prob`.
-    # run_astar_for_weights_in_range(MSTAirDistHeuristic, big_deliveries_prob)
+    run_astar_for_weights_in_range(MSTAirDistHeuristic, big_deliveries_prob)
 
     # Ex.24
     # TODO:
@@ -217,8 +216,8 @@ def strict_deliveries_problem():
     # Ex.26
     # TODO: Call here the function `run_astar_for_weights_in_range()`
     #       with `MSTAirDistHeuristic` and `big_deliveries_prob`.
-    out = run_astar_for_weights_in_range(MSTAirDistHeuristic, small_deliveries_strict_problem)
-    print(out)
+    run_astar_for_weights_in_range(MSTAirDistHeuristic, small_deliveries_strict_problem)
+
     # Ex.28
     # TODO: create an instance of `AStar` with the `RelaxedDeliveriesHeuristic`,
     #       solve the `small_deliveries_strict_problem` with it and print the results (as before).
@@ -238,8 +237,8 @@ class Person:
         return hash((self.age, self.name))
 
 def main():
-    # map_problem()
-    # relaxed_deliveries_problem()
+    map_problem()
+    relaxed_deliveries_problem()
     strict_deliveries_problem()
 
 
