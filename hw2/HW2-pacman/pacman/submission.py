@@ -76,9 +76,11 @@ def betterEvaluationFunction(gameState):
   closest_ghost_state = gameState.getGhostState(closest_ghost_id)
   closest_ghost_dist = min(ghost_dists)
 
-  ghost_bonus = 200 * ((1/2) ** closest_ghost_dist - 1)
+  ghost_bonus = ((1/2) ** (closest_ghost_dist - 1))
   if closest_ghost_state.scaredTimer > 0 and closest_ghost_state.scaredTimer < 40:
-    ghost_bonus *= -1
+    ghost_bonus *= -200
+  else:
+    ghost_bonus *= 500
 
 # calculate food bonus
   food = gameState.getFood()
@@ -87,11 +89,12 @@ def betterEvaluationFunction(gameState):
   if len(food_dists) == 0:
       food_bonus = 0
   else:
-    food_bonus = min(food_dists)
+    food_bonus = min(food_dists) * 10
 
   total_bonus = gameState.getScore() - ghost_bonus - food_bonus
- # print("ghost bonus = {0}, food bonus = {1}, total = {2}".format(ghost_bonus, food_bonus, total_bonus))
-  print(gameState.getNumAgents())
+  #print("ghost bonus = {0}, food bonus = {1} ({3}), total = {2} ({4})".format(ghost_bonus, food_bonus, total_bonus, None, pos))
+  #print("Ghost State = {}, Ghost Distance = {} - {}, Ghost Bonus = {}".format(closest_ghost_state.scaredTimer, pos, closest_ghost_state.getPosition(), ghost_bonus))
+  #print(gameState.getNumAgents())
 
   return total_bonus
 #     ********* MultiAgent Search Agents- sections c,d,e,f*********
@@ -158,41 +161,39 @@ class MinimaxAgent(MultiAgentSearchAgent):
         The depth to which search should continue
 
     """
-    legal_moves = gameState.getLegalActions()
-    children = [gameState.generateSuccessor(self.index, action) for action in legal_moves]
-
-    scores = [self.miniMax(self.index, child, self.depth) for child in children]
-    best_score = max(scores)
-    best_indices = [index for index in range(len(scores)) if scores[index] == best_score]
-    chosen_index = random.choice(best_indices) # Pick randomly among the best
-
-    return legal_moves[chosen_index]
-
+    return self.miniMax(self.index, gameState, self.depth)[1]
 
   def miniMax(self, agent_id, state, depth):
-
-    if state.isWin() or depth == 0:
-        return betterEvaluationFunction(state)
+    if state.isWin() or state.isLose() or depth == 0:
+        return self.evaluationFunction(state), Directions.STOP
 
     legal_moves = state.getLegalActions(agent_id)
-    children = [state.generateSuccessor(agent_id, move) for move in legal_moves]
+    children = [(state.generateSuccessor(agent_id, move), move) for move in legal_moves]
+    if len(children) == 0:
+      print("not children!")
 
-    if agent_id == 0:
-        curr_max = -numpy.inf
+    next_agent = (agent_id+1) % state.getNumAgents()
+    next_depth = depth - (1 if next_agent == self.index else 0)
 
-        for child in children:
-
-            value = self.miniMax((agent_id + 1) % state.getNumAgents(), child, depth - 1)
-            curr_max = max(value, curr_max)
-            return curr_max
+    if agent_id == self.index:
+        cur_max = -numpy.inf
+        best = Directions.STOP
+        for child, move in children:
+          value, _ = self.miniMax(next_agent, child, next_depth)
+          if value > cur_max:
+            cur_max = value
+            best = move
+        return cur_max, best
 
     else:
-        curr_min = numpy.inf
-
-        for child in children:
-            value = self.miniMax((agent_id + 1) % state.getNumAgents(), child, depth)
-            curr_min = min(value, curr_min)
-            return curr_min
+        cur_min = numpy.inf
+        best = Directions.STOP
+        for child, move in children:
+          value, _ = self.miniMax(next_agent, child, next_depth)
+          if value < cur_min:
+            cur_min = value
+            best = move
+        return cur_min, best
 
 ######################################################################################
 # d: implementing alpha-beta
@@ -208,8 +209,47 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
     """
 
     # BEGIN_YOUR_CODE
-    raise Exception("Not implemented yet")
+    # Returns value, state pair
+    return self.alphaBeta(gameState, self.index, -numpy.inf, numpy.inf, self.depth)[1]
     # END_YOUR_CODE
+
+  def alphaBeta(self, gameState, agent, alpha, beta, depth):
+    # Maybe needs some tweaking? None arg should be safe...
+    if gameState.isWin() or gameState.isLose() or depth == 0:
+      return self.evaluationFunction(gameState), Directions.STOP
+
+    actions = gameState.getLegalActions(agent)
+    children = [(gameState.generateSuccessor(agent, action), action) for action in actions]
+
+    next_agent = (agent+1) % gameState.getNumAgents()
+    next_depth = depth - (1 if next_agent == self.index else 0)
+
+    if agent == self.index:
+      cur_max = -numpy.inf
+      best = Directions.STOP
+      for child, action in children:
+        value, _ = self.alphaBeta(child, next_agent, alpha, beta, next_depth)
+        if value > cur_max:
+          cur_max = value
+          alpha = max(alpha, cur_max)
+          best = action
+        if cur_max >= beta:
+          return numpy.inf, None
+      return cur_max, best
+    else:
+      cur_min = numpy.inf
+      best = Directions.STOP
+      for child, action in children:
+        value, _ = self.alphaBeta(child, next_agent, alpha, beta, next_depth)
+        if value < cur_min:
+          cur_min = value
+          beta = min(beta, cur_min)
+          best = action
+        if cur_min <= alpha:
+          return -numpy.inf, None
+      return cur_min, best
+
+
 
 ######################################################################################
 # e: implementing random expectimax
@@ -226,8 +266,38 @@ class RandomExpectimaxAgent(MultiAgentSearchAgent):
     """
 
     # BEGIN_YOUR_CODE
-    raise Exception("Not implemented yet")
+    return self.expectimax(gameState, self.index, self.depth)[1]]
+
     # END_YOUR_CODE
+
+  def expectimax(self, gameState, agent, depth):
+    if gameState.isWin() or gameState.isLose() or depth == 0:
+      return self.evaluationFunction(gameState), Directions.STOP
+    
+    actions = gameState.getLegalActions(agent)
+    children = [(gameState.generateSuccessor(agent, action), action) for action in actions]
+
+    next_agent = (agent+1) % gameState.getNumAgents()
+    next_depth = depth - (1 if next_agent == 0 else 0)
+
+    if self.probablistic(agent):
+      value = 0
+      for child, _ in children:
+        value += self.expectimax(child, next_agent, next_depth)[0]
+      return value / len(children), Directions.STOP
+    if agent == self.index:
+      cur_max = -numpy.inf
+      best = Directions.STOP
+      for child, action in children:
+        value, _ = self.expectimax(child, next_agent, next_depth)
+        if value > cur_max:
+          cur_max = value
+          best = action
+      return cur_max, best
+    # no else because all other agents are probabalistic
+
+  def probablistic(self, agent):
+     return self.index != agent
 
 ######################################################################################
 # f: implementing directional expectimax
@@ -244,8 +314,46 @@ class DirectionalExpectimaxAgent(MultiAgentSearchAgent):
     """
 
     # BEGIN_YOUR_CODE
-    raise Exception("Not implemented yet")
+    return self.d_expectimax(gameState, self.index, self.depth)[1]
     # END_YOUR_CODE
+
+  def d_expectimax(self, gameState, agent, depth):
+    if gameState.isWin() or gameState.isLose() or depth == 0:
+      return self.evaluationFunction(gameState), Directions.STOP
+
+    next_agent = (agent+1) % gameState.getNumAgents()
+    next_depth = depth - (1 if next_agent == 0 else 0)
+
+    if self.probablistic(agent):
+      value = 0
+      children = self.prob_children(gameState, agent)
+      for child, prob in children:
+        value += (prob * self.d_expectimax(child, next_agent, next_depth)[0])
+        return value, Directions.STOP
+    if agent == self.index:
+      actions = gameState.getLegalActions(agent)
+      children = [(gameState.generateSuccessor(agent, action), action) for action in actions]
+      cur_max = -numpy.inf
+      best = Directions.STOP
+      for child, action in children:
+        value, _ = self.d_expectimax(child, next_agent, next_depth)
+        if value > cur_max:
+          cur_max = value
+          best = action
+      return cur_max, best
+    # no else because all other agents are probabalistic
+
+  def probablistic(self, agent):
+     return self.index != agent
+
+  def prob_children(self, gameState, agent):
+    from ghostAgents import DirectionalGhost
+    ghost = DirectionalGhost(agent)
+    dist = ghost.getDistribution(gameState)
+
+    return [(gameState.generateSuccessor(agent, dir), prob) for dir, prob in dist.items()]
+    
+
 
 
 ######################################################################################
