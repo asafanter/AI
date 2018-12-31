@@ -4,11 +4,13 @@ from submission import *
 from ghostAgents import *
 from textDisplay import *
 
-players = [OriginalReflexAgent, ReflexAgent, MinimaxAgent, AlphaBetaAgent, RandomExpectimaxAgent]
+players = [OriginalReflexAgent, ReflexAgent, MinimaxAgent, AlphaBetaAgent, RandomExpectimaxAgent, DirectionalExpectimaxAgent]
 depths = [2, 3, 4]
+depths = [4]
 layouts = ['capsuleClassic', 'contestClassic', 'mediumClassic',
            'minimaxClassic', 'openClassic', 'originalClassic',
            'smallClassic', 'testClassic', 'trappedClassic', 'trickyClassic']
+layouts = ['trappedClassic']
 ghosts = [RandomGhost(1), RandomGhost(2)]
 
 
@@ -27,13 +29,14 @@ def run_game(player, layout_name, file_ptr, depth=1):
             layout_name + ',' +
             '%.2f' % avg_score + ',' +
             '%.2f' % (avg_time * 1e6) + 'E-06\n')
-    file_ptr.write(line)
+#    file_ptr.write(line)
+    print(line)
     return
 
 
 if __name__ == '__main__':
     base = time.time()
-    with open('results.csv', 'w+') as file_ptr:
+    with open('results_c.csv', 'w+') as file_ptr:
         for layout in layouts:
             for player in players:
                 if player in [OriginalReflexAgent, ReflexAgent]:
@@ -41,6 +44,6 @@ if __name__ == '__main__':
                 else:
                     for d in depths:
                         run_game(player(), layout, file_ptr, d)
-            file_ptr.write('\n')
+#            file_ptr.write('\n')
     file_ptr.close()
     print('experiments time: %d min' % (time.time() - base)/60)
