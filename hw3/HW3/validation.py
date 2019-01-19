@@ -1,11 +1,14 @@
 import numpy
 from aux_functions import *
+import pickle
 
 def split_crosscheck_groups(dataset, num_folds):
 
     groups = []
+    group_labels = []
     for i in range(num_folds):
         groups.append([])
+        group_labels.append([])
 
     data = dataset[0]
     labels = dataset[1]
@@ -17,22 +20,20 @@ def split_crosscheck_groups(dataset, num_folds):
 
     minority = false_data
     majority = true_data
+    majority_tag = True
 
     if num_falses > num_trues:
         minority = true_data
         majority = false_data
+        majority_tag = False
 
-    toGroups(groups, majority, num_folds)
-    toGroups(groups, minority, num_folds)
-    # majority, minority = divideRemains(groups, minority, majority, num_folds)
+    toGroups(groups, majority, num_folds, group_labels, majority_tag)
+    toGroups(groups, minority, num_folds, group_labels, not majority_tag)
 
-    print(len(groups[0]))
-    print(len(groups[1]))
-    print(len(groups[2]))
-    print(len(groups[3]))
+    toFiles(groups, group_labels)
 
 
-def toGroups(groups, arr, num_of_groups):
+def toGroups(groups, arr, num_of_groups, groups_labels, tag):
 
     size = int(len(arr) / num_of_groups)
 
@@ -46,8 +47,29 @@ def toGroups(groups, arr, num_of_groups):
 
         for j in range(len(chosen)):
             groups[i].append(chosen[j])
+            groups_labels[i].append(tag)
 
     for i in range(len(arr)):
         groups[i].append(arr[i])
+        groups_labels[i].append(tag)
 
 
+def toFiles(groups, group_lables):
+
+    for i in range(len(groups)):
+        output_file = open("ecg_fold_" + str(i) + ".data", "wb")
+
+        pickle.dump(groups[i], output_file)
+        pickle.dump(group_lables[i], output_file)
+
+        output_file.close()
+
+
+def load_k_fold_data(i):
+
+    input_file = open("ecg_fold_" + str(i) + ".data", "rb")
+
+    group = pickle.load(input_file)
+    labels = pickle.load(input_file)
+
+    return group, labels
