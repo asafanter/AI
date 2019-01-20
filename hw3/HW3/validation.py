@@ -78,7 +78,7 @@ def evaluate(classifier_factory, k):
     data = []
     labels = []
     for i in range(k):
-        d, l = load_k_fold_data(0)
+        d, l = load_k_fold_data(i)
         data.append(d)
         labels.append(l)
     
@@ -88,7 +88,7 @@ def evaluate(classifier_factory, k):
         train_labels = [label for group in labels[:i] + labels[i+1:] for label in group]
         classifier = classifier_factory.train(train_data, train_labels)
         for j in range(len(data[i])):
-            result = classfier.classify(data[i][j])
+            result = classifier.classify(data[i][j])
             if result == labels[i][j]:
                 acc += 1
             else:
