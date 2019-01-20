@@ -74,6 +74,7 @@ def load_k_fold_data(i):
 
     return group, labels
 
+
 def evaluate(classifier_factory, k):
     data = []
     labels = []
@@ -84,7 +85,7 @@ def evaluate(classifier_factory, k):
     
     acc, err = 0, 0
     for i in range(k):
-        train_data =  [datum for group in data[:i] + data[i+1:] for datum in group]
+        train_data = [datum for group in data[:i] + data[i+1:] for datum in group]
         train_labels = [label for group in labels[:i] + labels[i+1:] for label in group]
         classifier = classifier_factory.train(train_data, train_labels)
         for j in range(len(data[i])):

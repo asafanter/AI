@@ -1,3 +1,5 @@
+import numpy as np
+
 def euclidean_distance(p1, p2):
 
     if len(p1) == 0 or len(p2) == 0:
@@ -6,21 +8,24 @@ def euclidean_distance(p1, p2):
     return (sum([(x - y) ** 2 for x, y in zip(p1, p2)])) ** 0.5
 
 
-def normalize(vec):
+def normalize(vec, min_val, max_val):
 
-    max_val = max(vec)
-    min_val = min(vec)
     tot_range = max_val - min_val
 
-    for i in range(len(vec)):
+    res = vec
+    res = res.astype(np.float)
 
-        numerator = vec[i] - min_val
+    for i in range(len(res)):
 
-        if numerator == 0:
-            vec[i] = 0
-            break
+        numerator = res[i] - min_val
+
+        if numerator == 0.:
+            res[i] = 0.
+            continue
         else:
-            vec[i] = numerator / tot_range
+            res[i] = numerator / tot_range
+
+    return res
 
 
 def countBool(arr):
