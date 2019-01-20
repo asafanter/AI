@@ -9,7 +9,7 @@ class knn_classifier(abstract_classifier):
     def __init__(self, k, data, labels):
 
         self.k = k
-        self.data = data
+        self.data = [normalize(datum) for datum in data]
         self.labels = labels
 
     def classify(self, features):
