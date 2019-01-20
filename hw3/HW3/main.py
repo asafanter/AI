@@ -51,16 +51,19 @@ if __name__ == '__main__':
     #         acc, err = evaluate(knn_factory(k), 2)
     #         fp.write("{}, {}, {}\n".format(k, acc, err))
 
-    acc, err = evaluate(knn_factory(3), 2)
-    print("{} {}".format(acc, err))
+    with open('experiments12.csv', 'w') as fp:
+            acc, err = evaluate(Id3ClassifierFactory(), 2)
+            fp.write("{}, {}, {}\n".format(1, acc, err))
+            acc, err = evaluate(PerceptronClassifierFactory(), 2)
+            fp.write("{}, {}, {}\n".format(2, acc, err))
 
 
 
+    # acc, err = evaluate(knn_factory(3), 2)
+    # print("{} {}".format(acc, err))
 
-    # skf = StratifiedKFold(n_splits=4)
-    # skf.get_n_splits(data1, labels)
-    # for train_index, test_index in skf.split(data1, labels):
-    #     print("TRAIN:", train_index, "TEST:", test_index)
+
+
 
 
 
