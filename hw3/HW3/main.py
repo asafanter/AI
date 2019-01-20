@@ -6,12 +6,12 @@ from validation import *
 from sklearn.model_selection import StratifiedKFold
 
 if __name__ == '__main__':
-    # data, labels, test = load_data()
+    data, labels, test = load_data()
     #
     # data1 = np.array([[0, 0],
     #                   [1, 1],
     #                   [2, 2],
-    #                   [3, 3],
+    #                   [3, 3],cd 
     #                   [4, 4],
     #                   [5, 5],
     #                   [6, 6],
@@ -42,10 +42,12 @@ if __name__ == '__main__':
     #           True, True, True, True, True, True, True,
     #           True, False, False, False, False, False, False]
 
+    # split_crosscheck_groups([data, labels], 2)
+
     with open('experiments6.csv', 'w') as fp:
         for k in [1,3,5,7,13]:
             acc, err = evaluate(knn_factory(k), 2)
-            fp.write("{}, {}, {}".format(k, acc, err))
+            fp.write("{}, {}, {}\n".format(k, acc, err))
 
     # skf = StratifiedKFold(n_splits=4)
     # skf.get_n_splits(data1, labels)
