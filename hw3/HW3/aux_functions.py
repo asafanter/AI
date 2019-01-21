@@ -8,25 +8,8 @@ def euclidean_distance(p1, p2):
     return (sum([(x - y) ** 2 for x, y in zip(p1, p2)])) ** 0.5
 
 
-def normalize(vec, min_val, max_val):
-
-    tot_range = max_val - min_val
-
-    res = vec
-    res = res.astype(np.float)
-
-    for i in range(len(res)):
-
-        numerator = res[i] - min_val
-
-        if numerator == 0.:
-            res[i] = 0.
-            continue
-        else:
-            res[i] = numerator / tot_range
-
-    return res
-
+def normalize(vec, subtracts, divisors):
+    return (np.array(vec) - np.array(subtracts))/np.array(divisors)
 
 def countBool(arr):
     num_trues = sum(arr)

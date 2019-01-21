@@ -2,6 +2,7 @@ from hw3_utils import abstract_classifier_factory
 from knn_classifier import knn_classifier
 from aux_functions import *
 import numpy as np
+import random
 
 
 class knn_factory(abstract_classifier_factory):
@@ -11,18 +12,18 @@ class knn_factory(abstract_classifier_factory):
 
     def train(self, data, labels):
 
-        data = np.array(data)
-        data = data.astype(np.float)
+        data = np.array(data, dtype=np.float32)
         labels = np.array(labels)
 
-        min_list = []
-        max_list = []
+        subtract = []
+        divisor = []
 
         for i in range(len(data[0])):
             min_val = min(data[:, i])
             max_val = max(data[:, i])
-            min_list.append(min_val)
-            max_list.append(max_val)
-            data[:, i] = normalize(data[:, i], min_val, max_val)
-
-        return knn_classifier(self.k, data, labels, min_list, max_list)
+            subtract.append(min_val)
+            divisor.append(max_val-min_val)
+        
+        norm_data = [normalize(datum, subtract, divisor) for datum in data]
+        classifier = knn_classifier(self.k, norm_data, labels, subtract, divisor)
+        return classifier
