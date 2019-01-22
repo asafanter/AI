@@ -69,12 +69,12 @@ if __name__ == '__main__':
         best_results = get_best(competition_factory(1), num_folds)
         print("{} time units".format(tick - default_timer()))
         print("checked 1-NN. Acc = {}".format(best_results['acc']))
-        results = get_best(competition_factory(2), num_folds)
-        print("checked 2-NN. Acc = {}".format(results['acc']))
-        num_neighbors = 2
+        results = get_best(competition_factory(3), num_folds)
+        print("checked 3-NN. Acc = {}".format(results['acc']))
+        num_neighbors = 3
         while best_results['acc'] < results['acc']:
             best_results = results
-            num_neighbors += 1
+            num_neighbors += 2
             results = get_best(competition_factory(num_neighbors), num_folds)
             print("checked {}-NN. Acc = {}".format(num_neighbors, results['acc']))
         
