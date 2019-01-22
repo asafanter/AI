@@ -25,7 +25,7 @@ class competition_factory(abstract_classifier_factory):
             divisor.append(max_val-min_val)
         
         dl_pairs = []
-        for i in range(len(data[0])):
+        for i in range(len(data)):
             dl_pairs.append((data[i], labels[i]))
 
         # Initialize classifier with a random data/label pair
@@ -36,7 +36,7 @@ class competition_factory(abstract_classifier_factory):
         changed = True
         externals = []
         while changed:
-            print("loop {}".format(len(used_labels)))
+            print("loop {}/{}".format(len(used_labels), len(dl_pairs)))
             changed = False
             random.shuffle(dl_pairs) # Not 100% sure why this is important, but its in the lecture slides ¯\_(ツ)_/¯
             for d, l in dl_pairs:
