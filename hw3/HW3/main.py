@@ -52,25 +52,29 @@ if __name__ == '__main__':
     #         acc, err = evaluate(knn_factory(k), 2)
     #         fp.write("{}, {}, {}\n".format(k, acc, err))
 
-    with open('experiments12.csv', 'w') as fp:
-            acc, err = evaluate(Id3ClassifierFactory(), 2)
-            fp.write("{}, {}, {}\n".format(1, acc, err))
-            acc, err = evaluate(PerceptronClassifierFactory(), 2)
-            fp.write("{}, {}, {}\n".format(2, acc, err))
+    # with open('experiments12.csv', 'w') as fp:
+    #         acc, err = evaluate(Id3ClassifierFactory(), 2)
+    #         fp.write("{}, {}, {}\n".format(1, acc, err))
+    #         acc, err = evaluate(PerceptronClassifierFactory(), 2)
+    #         fp.write("{}, {}, {}\n".format(2, acc, err))
 
     ## Competition classifier
     best_classifier = {'acc':0}
     for num_folds in range(2, 10):
+        print("Starting loop for {} folds".format(num_folds))
         split_crosscheck_groups([data, labels], num_folds)
 
+        
         best_results = get_best(competition_factory(1), num_folds)
+        print("checked 1-NN. Acc = {}".format(best_results['acc']))
         results = get_best(competition_factory(2), num_folds)
+        print("checked 2-NN. Acc = {}".format(results['acc']))
         num_neighbors = 2
         while best_results['acc'] < results['acc']:
             best_results = results
             num_neighbors += 1
             results = get_best(competition_factory(num_neighbors), num_folds)
-            results['num_neighbors': 
+            print("checked {}-NN. Acc = {}".format(num_neighbors, results['acc']))
         
         if best_results['acc'] > best_classifier['acc']:
             best_classifier = best_results
@@ -80,6 +84,8 @@ if __name__ == '__main__':
     
     # TODO: Analysis of best classifier (best_classifier['classifier']) and
     #       parameters, or just running the test data through it.
+
+    print(best_classifier['acc'], best_classifier['num_neighbors'], best_classifier['num_folds'], best_classifier['validation'])
 
 
 

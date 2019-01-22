@@ -38,18 +38,18 @@ class competition_factory(abstract_classifier_factory):
         while changed:
             changed = False
             random.shuffle(dl_pairs) # Not 100% sure why this is important, but its in the lecture slides ¯\_(ツ)_/¯
-            for i in range(dl_pairs):
-                if classifier.classify(dl_pairs[i][0]) != dl_pairs[i][1]:
+            for d, l in dl_pairs:
+                if classifier.classify(d) != l:
                     # If the classifier failed, we add the new pair to the internals
                     # and indicate that a change has occured
                     changed = True
-                    used_data.append(normalize(dl_pairs[i][0], subtract, divisor))
-                    used_labels.append(dl_pairs[i][0])
+                    used_data.append(normalize(d, subtract, divisor))
+                    used_labels.append(l)
                     classifier = knn_classifier(self.k, used_data, used_labels, subtract, divisor)
                 else:
                     # Otherwise we keep it for the next round, in case
                     # it's classification changes for the worse
-                    externals.append(dl_pairs[i])
+                    externals.append((d, l))
             dl_pairs = externals
         
         # When the set is stable, we return that classifier. It is the one with
