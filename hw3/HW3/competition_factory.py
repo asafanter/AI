@@ -34,8 +34,8 @@ class competition_factory(abstract_classifier_factory):
         used_labels = [dl_pairs.pop(0)[1]]
         classifier = knn_classifier(self.k, used_data, used_labels, subtract, divisor)
         changed = True
-        externals = []
         while changed:
+            externals = []
             print("loop {}/{}".format(len(used_labels), len(dl_pairs)))
             changed = False
             random.shuffle(dl_pairs) # Not 100% sure why this is important, but its in the lecture slides ¯\_(ツ)_/¯
