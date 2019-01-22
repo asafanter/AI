@@ -1,4 +1,5 @@
 from knn_classifier import knn_classifier
+from competition_factory import competition_factory
 from knn_factory import knn_factory
 from hw3_utils import *
 import numpy
@@ -56,6 +57,31 @@ if __name__ == '__main__':
             fp.write("{}, {}, {}\n".format(1, acc, err))
             acc, err = evaluate(PerceptronClassifierFactory(), 2)
             fp.write("{}, {}, {}\n".format(2, acc, err))
+
+    ## Competition classifier
+    best_classifier = {'acc':0}
+    for num_folds in range(2, 10):
+        split_crosscheck_groups([data, labels], num_folds)
+
+        best_results = get_best(competition_factory(1), num_folds)
+        results = get_best(competition_factory(2), num_folds)
+        num_neighbors = 2
+        while best_results['acc'] < results['acc']:
+            best_results = results
+            num_neighbors += 1
+            results = get_best(competition_factory(num_neighbors), num_folds)
+            results['num_neighbors': 
+        
+        if best_results['acc'] > best_classifier['acc']:
+            best_classifier = best_results
+            # Current value is the one that broke the loop by being worse
+            best_classifier['num_neighbors'] = num_neighbors - 1
+            best_classifier['num_folds'] = num_folds
+    
+    # TODO: Analysis of best classifier (best_classifier['classifier']) and
+    #       parameters, or just running the test data through it.
+
+
 
 
 

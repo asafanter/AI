@@ -96,3 +96,36 @@ def evaluate(classifier_factory, k):
                 err += 1
     N = sum([len(group) for group in data])
     return acc/N, err/N
+
+def get_best(classifier_factory, k):
+    """ Returns the best classifier made by classifier_factory on k folds of data.
+        That is, returns the classifier whose train partition was most accurate over its validation partition """
+    data = []
+    labels = []
+    for i in range(k):
+        d, l = load_k_fold_data(i)
+        data.append(d)
+        labels.append(l)
+    
+    best_validation = 0
+    best_acc = 0
+    best_classifier = None
+    for i in range(k):
+        # Build classifier
+        acc = 0
+        train_data = [datum for group in data[:i] + data[i+1:] for datum in group]
+        train_labels = [label for group in labels[:i] + labels[i+1:] for label in group]
+        classifier = classifier_factory.train(train_data, train_labels)
+        # Test classifier
+        for j in range(len(data[i])):
+            result = classifier.classify(data[i][j])
+            if result == labels[i][j]:
+                acc += 1
+        # Update best classifier
+        if acc/len(data[i]) > best_acc:
+            best_acc = acc/len(data[i])
+            best_classifier = classifier
+            best_validation = i
+    
+    # Return best classifier
+    return {'classifier':best_classifier, 'acc': best_acc, 'validation': best_validation}
