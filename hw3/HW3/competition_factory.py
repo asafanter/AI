@@ -36,6 +36,7 @@ class competition_factory(abstract_classifier_factory):
         changed = True
         externals = []
         while changed:
+            print("loop {}".format(len(used_labels)))
             changed = False
             random.shuffle(dl_pairs) # Not 100% sure why this is important, but its in the lecture slides ¯\_(ツ)_/¯
             for d, l in dl_pairs:

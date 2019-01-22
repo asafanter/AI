@@ -7,6 +7,7 @@ from validation import *
 from sklearn.model_selection import StratifiedKFold
 from PerceptronClassifier import PerceptronClassifierFactory
 from Id3Classifier import Id3ClassifierFactory
+from timeit import default_timer
 
 if __name__ == '__main__':
     data, labels, test = load_data()
@@ -64,8 +65,9 @@ if __name__ == '__main__':
         print("Starting loop for {} folds".format(num_folds))
         split_crosscheck_groups([data, labels], num_folds)
 
-        
+        tick = default_timer()
         best_results = get_best(competition_factory(1), num_folds)
+        print("{} time units".format(tick - default_timer()))
         print("checked 1-NN. Acc = {}".format(best_results['acc']))
         results = get_best(competition_factory(2), num_folds)
         print("checked 2-NN. Acc = {}".format(results['acc']))
