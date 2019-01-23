@@ -66,22 +66,22 @@ if __name__ == '__main__':
         split_crosscheck_groups([data, labels], num_folds)
 
         tick = default_timer()
-        best_results = get_best(competition_factory(1), num_folds)
+        best_results = get_best(knn_factory(1), num_folds)
         print("{} time units".format(tick - default_timer()))
         print("checked 1-NN. Acc = {}".format(best_results['acc']))
-        results = get_best(competition_factory(3), num_folds)
+        results = get_best(knn_factory(3), num_folds)
         print("checked 3-NN. Acc = {}".format(results['acc']))
         num_neighbors = 3
-        while best_results['acc'] < results['acc']:
+        while best_results['acc'] <= results['acc']:
             best_results = results
             num_neighbors += 2
-            results = get_best(competition_factory(num_neighbors), num_folds)
+            results = get_best(knn_factory(num_neighbors), num_folds)
             print("checked {}-NN. Acc = {}".format(num_neighbors, results['acc']))
         
         if best_results['acc'] > best_classifier['acc']:
             best_classifier = best_results
             # Current value is the one that broke the loop by being worse
-            best_classifier['num_neighbors'] = num_neighbors - 1
+            best_classifier['num_neighbors'] = num_neighbors - 2
             best_classifier['num_folds'] = num_folds
     
     # TODO: Analysis of best classifier (best_classifier['classifier']) and

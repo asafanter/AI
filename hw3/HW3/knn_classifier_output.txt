@@ -1,0 +1,295 @@
+Starting loop for 2 folds
+validating with fold 0
+validating with fold 1
+-61.24472383194593 time units
+checked 1-NN. Acc = 0.11976047904191617
+validating with fold 0
+validating with fold 1
+checked 3-NN. Acc = 0.935871743486974
+validating with fold 0
+validating with fold 1
+checked 5-NN. Acc = 0.9458917835671342
+validating with fold 0
+validating with fold 1
+checked 7-NN. Acc = 0.9498997995991983
+validating with fold 0
+validating with fold 1
+checked 9-NN. Acc = 0.9539078156312625
+validating with fold 0
+validating with fold 1
+checked 11-NN. Acc = 0.9599198396793587
+validating with fold 0
+validating with fold 1
+checked 13-NN. Acc = 0.9539078156312625
+Starting loop for 3 folds
+validating with fold 0
+validating with fold 1
+validating with fold 2
+-78.79896681082158 time units
+checked 1-NN. Acc = 0.11976047904191617
+validating with fold 0
+validating with fold 1
+validating with fold 2
+checked 3-NN. Acc = 0.9457831325301205
+validating with fold 0
+validating with fold 1
+validating with fold 2
+checked 5-NN. Acc = 0.963855421686747
+validating with fold 0
+validating with fold 1
+validating with fold 2
+checked 7-NN. Acc = 0.9608433734939759
+Starting loop for 4 folds
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+-88.68880409045471 time units
+checked 1-NN. Acc = 0.12
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+checked 3-NN. Acc = 0.92
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+checked 5-NN. Acc = 0.94
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+checked 7-NN. Acc = 0.944
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+checked 9-NN. Acc = 0.952
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+checked 11-NN. Acc = 0.952
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+checked 13-NN. Acc = 0.956
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+checked 15-NN. Acc = 0.956
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+checked 17-NN. Acc = 0.952
+Starting loop for 5 folds
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+-95.99768542576749 time units
+checked 1-NN. Acc = 0.12
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+checked 3-NN. Acc = 0.9396984924623115
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+checked 5-NN. Acc = 0.9701492537313433
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+checked 7-NN. Acc = 0.9502487562189055
+Starting loop for 6 folds
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+-98.68788037586023 time units
+checked 1-NN. Acc = 0.11976047904191617
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+checked 3-NN. Acc = 0.9341317365269461
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+checked 5-NN. Acc = 0.9520958083832335
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+checked 7-NN. Acc = 0.9520958083832335
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+checked 9-NN. Acc = 0.9575757575757575
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+checked 11-NN. Acc = 0.9757575757575757
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+checked 13-NN. Acc = 0.9575757575757575
+Starting loop for 7 folds
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+validating with fold 6
+-101.83461752636276 time units
+checked 1-NN. Acc = 0.11971830985915492
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+validating with fold 6
+checked 3-NN. Acc = 0.9577464788732394
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+validating with fold 6
+checked 5-NN. Acc = 0.9577464788732394
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+validating with fold 6
+checked 7-NN. Acc = 0.958041958041958
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+validating with fold 6
+checked 9-NN. Acc = 0.958041958041958
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+validating with fold 6
+checked 11-NN. Acc = 0.9577464788732394
+Starting loop for 8 folds
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+validating with fold 6
+validating with fold 7
+-103.62881734264147 time units
+checked 1-NN. Acc = 0.12
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+validating with fold 6
+validating with fold 7
+checked 3-NN. Acc = 0.944
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+validating with fold 6
+validating with fold 7
+checked 5-NN. Acc = 0.952
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+validating with fold 6
+validating with fold 7
+checked 7-NN. Acc = 0.96
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+validating with fold 6
+validating with fold 7
+checked 9-NN. Acc = 0.952
+Starting loop for 9 folds
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+validating with fold 6
+validating with fold 7
+validating with fold 8
+-105.79039008616837 time units
+checked 1-NN. Acc = 0.125
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+validating with fold 6
+validating with fold 7
+validating with fold 8
+checked 3-NN. Acc = 0.9642857142857143
+validating with fold 0
+validating with fold 1
+validating with fold 2
+validating with fold 3
+validating with fold 4
+validating with fold 5
+validating with fold 6
+validating with fold 7
+validating with fold 8
+checked 5-NN. Acc = 0.954954954954955
+0.9757575757575757 11 6 5

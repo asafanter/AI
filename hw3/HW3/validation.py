@@ -111,14 +111,13 @@ def get_best(classifier_factory, k):
     best_acc = 0
     best_classifier = None
     for i in range(k):
-        print("next permutation")
         # Build classifier
         acc = 0
         train_data = [datum for group in data[:i] + data[i+1:] for datum in group]
         train_labels = [label for group in labels[:i] + labels[i+1:] for label in group]
         classifier = classifier_factory.train(train_data, train_labels)
         # Test classifier
-        print("validating")
+        print("validating with fold {}".format(i))
         for j in range(len(data[i])):
             result = classifier.classify(data[i][j])
             if result == labels[i][j]:
