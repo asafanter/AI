@@ -89,7 +89,11 @@ if __name__ == '__main__':
 
     print(best_classifier['acc'], best_classifier['num_neighbors'], best_classifier['num_folds'], best_classifier['validation'])
 
+    results = []
+    for i in range(len(test)):
+        results.append(best_classifier['classifier'].classify(test[i]))
 
+    write_prediction(results)
 
 
 
